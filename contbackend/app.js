@@ -11,13 +11,15 @@ require("dotenv").config();
 // app
 const app = express();
 
-//const catRoute =require('./routes/category')
+const marka =require('./routes/marka')
 
 // middlewares
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cors());
+ app.use(express.static(path.join(__dirname, 'upload')));
 
+ console.log(path.join(__dirname, 'upload'));
 
 
 
@@ -26,7 +28,10 @@ app.use(cors());
 
 // routes middleware
 
-// app.use('/api',authRoutes)
+app.use('/api/marka',marka)
+
+
+
 
 //   readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
 
