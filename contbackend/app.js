@@ -12,6 +12,7 @@ require("dotenv").config();
 const app = express();
 
 const marka =require('./routes/marka')
+const car =require('./routes/car')
 
 // middlewares
 app.use(morgan("dev"));
@@ -29,6 +30,7 @@ app.use(cors());
 // routes middleware
 
 app.use('/api/marka',marka)
+app.use('/api/car',car)
 
 
 
