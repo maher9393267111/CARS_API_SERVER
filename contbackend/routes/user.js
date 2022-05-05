@@ -30,6 +30,7 @@ router.get('/hello',isAuthenticated,hello)
 // router("/logout").get(logout);
 
 // router("/user").get(getUser);
+router.get('/myProfile',isAuthenticated,myProfile);
 
 // router("/me").get(isAuthenticated, myProfile);
 
