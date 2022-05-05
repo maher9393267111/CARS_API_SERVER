@@ -137,3 +137,23 @@ exports.filterCars = async (req, res, next) => {
     data: carFilter,
   });
 };
+
+
+
+// pagination all cars
+// http://localhost:5000/api/car/pagination?page=2&limit=10
+
+exports.paginationCars = async (req, res, next) => {
+
+    const { page, limit } = req.query;
+    
+    const skip = (page - 1) * limit;
+    
+    const cars = await carModel.find().skip(skip).limit(limit).select("name marka_name price ");
+    
+    res.status(200).json({
+        success: true,
+        message: "cars fetched",
+        data: cars,
+    });
+    }

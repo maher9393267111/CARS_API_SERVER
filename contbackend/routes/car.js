@@ -6,6 +6,7 @@ const {createCar,
     
     getAllcars,
     filterCars,
+    paginationCars
 
 } = require("../controllers/car");
 
@@ -31,6 +32,8 @@ router.post("/create", upload.array("images"), createCar);
 router.get("/get-all", getAllcars);
 
 router.post("/filter", filterCars);
+
+router.get("/pagination", paginationCars);
 
 
 
