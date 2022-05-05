@@ -4,7 +4,8 @@ const router = express.Router();
 
 const {createCar,
     
-    getAllcars
+    getAllcars,
+    filterCars,
 
 } = require("../controllers/car");
 
@@ -28,6 +29,8 @@ const upload = multer({ storage: storage });
 router.post("/create", upload.array("images"), createCar);
 
 router.get("/get-all", getAllcars);
+
+router.post("/filter", filterCars);
 
 
 
