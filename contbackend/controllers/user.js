@@ -97,24 +97,16 @@ exports.Register = async (req, res) => {
   }
 };
 
-
 // hello auth deneme
 
 exports.hello = async (req, res) => {
+  console.log(req.user);
 
-
-    console.log(req.user)
-
-
-    res.json({
-
-        success: true,
-        user: req.user
-
-    })
-
-}
-
+  res.json({
+    success: true,
+    user: req.user,
+  });
+};
 
 exports.logout = async (req, res) => {
   try {
@@ -372,10 +364,6 @@ exports.addProject = async (req, res) => {
   try {
     const { url, title, image, description, techStack } = req.body;
 
-   
-
-
-
     const user = await User.findById(req.user._id);
 
     const myCloud = await cloudinary.v2.uploader.upload(image, {
@@ -506,66 +494,81 @@ exports.contact = async (req, res) => {
   }
 };
 
-
-
 //updateuserAboutFiles
 
 exports.updateuserAboutFiles = async (req, res) => {
+  // find user id to update
 
-// find user id to update
+  const user = await User.findById(req.user._id);
 
-const user = await User.findById(req.user._id);
+  const { name, title, description, subtitle, quote } = req.body;
+  console.log(req.body);
 
-const { name,title,description,subtitle,quote } = req.body;
-console.log(req.body);
+  const image = req.file; //image;
+  console.log(image);
+
+  // upload image to cloudinary
+
+  const myCloud = await cloudinary.uploader.upload(image.path, {
+    folder: "portfolio",
+  });
+
+  // add fileds to about object req.body and image from cloudinary
+
+  user.about = {
+    name: name,
+    title: title,
+    description: description,
+    subtitle: subtitle,
+    quote: quote,
+    image: {
+      public_id: myCloud.public_id,
+
+      url: myCloud.secure_url,
+    },
+  };
+
+  await user.save();
+
+  // find user after update
+
+  const UserafterUpdate = await User.findById(req.user._id);
+
+  res.status(200).json({
+    success: true,
+    UserafterUpdate,
+
+    message: "Added To About",
+  });
+};
 
 
-const  image  = req.file  //image;
-console.log(image);
+
+// delete user about fileds
 
 
- // upload image to cloudinary
-
-    const myCloud = await cloudinary.uploader.upload(image.path, {
-
-        folder: "portfolio",
-    
-        });
-    
-        // add fileds to about object req.body and image from cloudinary
-
-        user.about={
-name:name,
-title:title,
-description:description,
-subtitle:subtitle,
-quote:quote,
-image:{
-    public_id: myCloud.public_id,
-
-    url: myCloud.secure_url,
+exports.deleteAbout = async (req, res) => {
 
 
+    const user = await User.findById(req.user._id);
 
-        }
-        }
-        
-    
-        await user.save();
+if (user.about?.image?.public_id) {
 
-        // find user after update
+    await cloudinary.uploader.destroy(user.about.image.public_id);
 
-        const UserafterUpdate = await User.findById(req.user._id);
+}
+    user.about = {};
 
-    
-        res.status(200).json({
-    
+    await user.save();
+
+
+    res.status(200).json({
+
+
         success: true,
-        UserafterUpdate,
-    
-        message: "Added To About",
-    
-        });
-    
-    }
 
+        message: "Deleted From About",
+
+    });
+
+}

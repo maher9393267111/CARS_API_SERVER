@@ -13,6 +13,7 @@ const {
   deleteYoutube,
   deleteProject,
   Register,
+  deleteAbout,
   hello,
   updateuserAboutFiles,
 } = require ("../controllers/user.js");
@@ -54,6 +55,10 @@ router.get('/myProfile',isAuthenticated,myProfile);
 // update ubout filed in user
 router.post('/updateuserAbout',isAuthenticated,upload.single('image'),updateuserAboutFiles);
 
+
+// delete about object in user
+
+router.get('/deleteAbout',isAuthenticated,deleteAbout);
 
 
 
