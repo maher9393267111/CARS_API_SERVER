@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { readdirSync } = require("fs");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 // app
@@ -13,14 +14,15 @@ const app = express();
 
 const marka =require('./routes/marka')
 const car =require('./routes/car')
+const user =require('./routes/user')
 
 // middlewares
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "2mb" }));
 app.use(cors());
  app.use(express.static(path.join(__dirname, 'upload')));
-
- console.log(path.join(__dirname, 'upload'));
+app.use(cookieParser());
+ //console.log(path.join(__dirname, 'upload'));
 
 
 
@@ -31,6 +33,7 @@ app.use(cors());
 
 app.use('/api/marka',marka)
 app.use('/api/car',car)
+app.use('/api/user',user)
 
 
 
